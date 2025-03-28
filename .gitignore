@@ -1,0 +1,23 @@
+# Node.js
+node_modules/
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Build
+frontend/build/
+dist/
+
+# Docker
+*.pid
+*.sock
+docker-compose.override.yml
+
+# Misc
+.DS_Store
+.env.*
