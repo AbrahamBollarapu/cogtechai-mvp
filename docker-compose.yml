@@ -1,43 +1,45 @@
+version: "3.8"
+
 services:
-  frontend:
-    build:
-      context: ./frontend
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
-
-  backend:
-    build:
-      context: ./backend-api
-    ports:
-      - "5000:5000"
-    environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=secret
-      - MYSQL_DATABASE=cogtechai
-    depends_on:
-      - ai
-      - mysql
-
-  ai:
-    build:
-      context: ./ai-service
-    ports:
-      - "8000:8000"
-    environment:
-      - USE_MOCK_AI=true  # Toggle this to false when switching to real OpenAI
-
   mysql:
     image: mysql:8.0
+    container_name: cogtechai-mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=cogtechai
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: cogtechai
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
+
+  backend-api:
+    build:
+      context: ./backend-api
+    container_name: cogtechai-backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+
+  ai-service:
+    build:
+      context: ./ai-service
+    container_name: cogtechai-ai-service
+    ports:
+      - "5001:8000"
+    env_file:
+      - ./ai-service/.env
+    depends_on:
+      - backend-api
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: cogtechai-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend-api
 
 volumes:
-  mysql_data:
+  mysql-data:

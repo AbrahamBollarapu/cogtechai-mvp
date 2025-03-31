@@ -1,6 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './App.css';
+import React from 'react';
+import AIChatPanel from './components/AIChatPanel';
+
+function App() {
+  return <AIChatPanel />;
+}
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white w-full max-w-3xl p-6 rounded-2xl shadow-lg">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          💬 CogTechAI Assistant
+        </h2>
+        <AIChatPanel />
+      </div>
+    </div>
+  );
+}
+
+export default App;
 
 function App() {
   const [prompt, setPrompt] = useState('');
