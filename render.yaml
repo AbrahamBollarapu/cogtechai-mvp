@@ -4,42 +4,35 @@ services:
     env: docker
     plan: free
     repo: https://github.com/AbrahamBollarapu/cogtechai-mvp
-    dockerfilePath: ./frontend/Dockerfile
-    buildCommand: npm install && npm run build
-    startCommand: serve -s build
-    envVars:
-      - key: NODE_ENV
-        value: production
+    branch: main
+    rootDir: frontend
+    dockerfilePath: ./Dockerfile
     autoDeploy: true
+    healthCheckPath: /
 
   - type: web
-    name: cogtechai-backend-api
+    name: cogtechai-backend
     env: docker
     plan: free
     repo: https://github.com/AbrahamBollarapu/cogtechai-mvp
-    dockerfilePath: ./backend-api/Dockerfile
-    startCommand: node index.js
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: MYSQL_HOST
-        value: YOUR_MYSQL_HOST
-      - key: MYSQL_USER
-        value: root
-      - key: MYSQL_PASSWORD
-        value: secret
+    branch: main
+    rootDir: backend-api
+    dockerfilePath: ./Dockerfile
     autoDeploy: true
+    healthCheckPath: /api/health
 
   - type: web
     name: cogtechai-ai-service
     env: docker
     plan: free
     repo: https://github.com/AbrahamBollarapu/cogtechai-mvp
-    dockerfilePath: ./ai-service/Dockerfile
-    startCommand: python app.py
-    envVars:
-      - key: MOCK_MODE
-        value: true
-      - key: OPENAI_API_KEY
-        value: your_openai_key
+    branch: main
+    rootDir: ai-service
+    dockerfilePath: ./Dockerfile
     autoDeploy: true
+    healthCheckPath: /ai/generate
+
+databases:
+  - name: cogtechai-db
+    plan: free
+    postgresMajorVersion: 15
